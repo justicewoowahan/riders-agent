@@ -1,6 +1,6 @@
 package com.woowahan.riders.agent.api.service;
 
-import com.woowahan.riders.agent.api.domain.HelloEntity;
+import com.woowahan.riders.domain.HelloEntity;
 import com.woowahan.riders.agent.api.repository.HelloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
-package com.woowahan.riders.agent.api.service;
+package com.woowahan.riders.agent.batch.service;
 
 import com.woowahan.riders.domain.HelloEntity;
-import com.woowahan.riders.agent.api.ApiApplication;
-import com.woowahan.riders.agent.api.repository.HelloRepository;
+import com.woowahan.riders.agent.batch.BatchApplication;
+import com.woowahan.riders.agent.batch.repository.HelloRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 /**
- * Created by justicehoop on 2016. 3. 23..
+ * Created by justicehoop on 2016. 3. 28..
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ApiApplication.class)
+@SpringApplicationConfiguration(classes = BatchApplication.class)
 @WebAppConfiguration
 @Transactional
 public class HelloServiceTest {

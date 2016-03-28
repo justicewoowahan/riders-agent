@@ -1,7 +1,7 @@
-package com.woowahan.riders.agent.api.web.restcontroller;
+package com.woowahan.riders.agent.dashboard.web.controller;
 
 import com.woowahan.riders.domain.HelloEntity;
-import com.woowahan.riders.agent.api.repository.HelloRepository;
+import com.woowahan.riders.agent.dashboard.repository.HelloRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,14 +11,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 /**
- * Created by justicehoop on 2016. 3. 23..
+ * Created by justicehoop on 2016. 3. 28..
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

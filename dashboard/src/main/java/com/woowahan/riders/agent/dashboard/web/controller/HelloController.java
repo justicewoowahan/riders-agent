@@ -1,7 +1,7 @@
-package com.woowahan.riders.agent.api.web.restcontroller;
+package com.woowahan.riders.agent.dashboard.web.controller;
 
 import com.woowahan.riders.domain.HelloEntity;
-import com.woowahan.riders.agent.api.service.HelloService;
+import com.woowahan.riders.agent.dashboard.service.HelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Created by justicehoop on 2016. 3. 23..
+ * Created by justicehoop on 2016. 3. 28..
  */
 @RestController
 @RequestMapping(value = "")

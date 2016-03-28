@@ -1,6 +1,6 @@
 package com.woowahan.riders.agent.admin.web.restcontroller;
 
-import com.woowahan.riders.agent.admin.domain.HelloEntity;
+import com.woowahan.riders.domain.HelloEntity;
 import com.woowahan.riders.agent.admin.service.HelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

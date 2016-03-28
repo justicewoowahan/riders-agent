@@ -1,6 +1,6 @@
 package com.woowahan.riders.agent.admin.repository;
 
-import com.woowahan.riders.agent.admin.domain.HelloEntity;
+import com.woowahan.riders.domain.HelloEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

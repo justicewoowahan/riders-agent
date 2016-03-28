@@ -1,7 +1,7 @@
 package com.woowahan.riders.agent.admin.service;
 
+import com.woowahan.riders.domain.HelloEntity;
 import com.woowahan.riders.agent.admin.AdminApplication;
-import com.woowahan.riders.agent.admin.domain.HelloEntity;
 import com.woowahan.riders.agent.admin.repository.HelloRepository;
 import org.junit.Before;
 import org.junit.Test;

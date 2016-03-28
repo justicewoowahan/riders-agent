@@ -1,14 +1,14 @@
-package com.woowahan.riders.agent.admin.service;
+package com.woowahan.riders.agent.dashboard.service;
 
 import com.woowahan.riders.domain.HelloEntity;
-import com.woowahan.riders.agent.admin.repository.HelloRepository;
+import com.woowahan.riders.agent.dashboard.repository.HelloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * Created by justicehoop on 2016. 3. 23..
+ * Created by justicehoop on 2016. 3. 28..
  */
 @Service
 public class HelloService {
