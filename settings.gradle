@@ -1,0 +1,10 @@
+rootProject.name = 'riders-agent'
+
+include 'entity'
+include 'entity-settlement'
+include 'commons'
+include 'api'
+include 'batch'
+include 'admin'
+include 'dashboard'
+

@@ -1,0 +1,233 @@
+group 'com.woowahan'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+
+def entityProjects = [project(':entity')]
+
+ext {
+    queryDslVersion='3.7.2'
+    javaVersion = '1.8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+
+buildscript {
+    repositories {
+        maven { url "http://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk/1.9.37/" }
+        maven { url "https://plugins.gradle.org/m2/"}
+
+        mavenCentral()
+    }
+
+    ext {
+        springBootVersion = '1.3.3.RELEASE'
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+//        classpath "io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE"
+        classpath 'com.moowork.gradle:gradle-gulp-plugin:0.11'
+    }
+}
+
+configure(entityProjects) {
+    apply plugin: 'java'
+    description = "delivery-agent entity project"
+
+    dependencies {
+        compile("com.mysema.querydsl:querydsl-jpa:$queryDslVersion")
+        runtime('com.h2database:h2')
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+    }
+
+    sourceSets {
+        generated {
+            java {
+                srcDirs = ['src/main/generated']
+            }
+        }
+    }
+
+    configurations {
+        querydslapt
+    }
+
+    task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+        source = sourceSets.main.java
+        classpath = configurations.compile + configurations.querydslapt
+        options.compilerArgs = [
+                "-proc:only",
+                "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+        ]
+        destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+    }
+
+    compileJava {
+        dependsOn generateQueryDSL
+        source generateQueryDSL.destinationDir
+    }
+
+    compileGeneratedJava {
+        dependsOn generateQueryDSL
+        options.warnings = false
+        classpath += sourceSets.main.runtimeClasspath
+    }
+
+    clean {
+        delete sourceSets.generated.java.srcDirs
+    }
+
+
+    task generateDDL(type: JavaExec) {
+        main = 'com.skplanet.recopick.core.infra.SchemaGenerator'
+        classpath = sourceSets.main.runtimeClasspath
+
+        args 'com.skplanet.recopick', 'org.hibernate.dialect.MySQL5InnoDBDialect' , './mysql-ddl.sql'
+    }
+}
+
+subprojects {
+
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'spring-boot'
+
+    repositories {
+
+        maven { url "https://oss.sonatype.org/content/groups/public" }
+        maven { url "http://repo.springsource.org/libs-release" }
+        maven { url "http://repo.springsource.org/libs-milestone" }
+        maven { url "http://repo.springsource.org/plugins-release" }
+        maven { url "http://repo.spring.io/libs-release" }
+        maven { url "https://repository.jboss.org/nexus/content/repositories/public/" }
+        maven { url "http://repo.opensourceagility.com/release/" }
+    }
+
+
+    targetCompatibility = javaVersion
+    sourceCompatibility = javaVersion
+    compileJava.options.encoding = 'UTF-8'
+
+    dependencies {
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile 'com.jayway.jsonpath:json-path:2.0.0'
+    }
+
+    configurations {
+        all*.exclude group: 'commons-logging', module: 'commons-logging' // replaced with jcl-over-slf4j
+        all*.exclude group: 'log4j', module: 'log4j' // replaced with log4j-over-slf4j
+
+        all*.exclude module: 'hsqldb'
+        all*.exclude module: 'slf4j-log4j12'
+
+    }
+
+
+    //spring boot project info
+    processResources {
+        filesMatching('application.yml') {
+            expand(project.properties)
+        }
+    }
+}
+
+
+project('entity') {
+    description = "entity. This project include utils class used by other entity projects"
+    bootRepackage.enabled = false
+
+    dependencies {
+    }
+}
+
+project('entity-settlement') {
+    description = "entity-settlement. This project include domain entities class saved by spring jpa"
+    bootRepackage.enabled = false
+
+    dependencies {
+        compile project(':entity')
+    }
+}
+
+project('commons') {
+    description="riders-agent-commons. This project include utils class that used by other projects."
+    bootRepackage.enabled = false
+
+    dependencies {
+        compile('org.springframework.boot:spring-boot-starter-data-jpa')
+        compile("org.springframework.boot:spring-boot-devtools")
+        runtime('com.h2database:h2')
+
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+    }
+}
+
+project('api') {
+    description="riders-agent-apis.This project provides rest apis used by web, mobile web, mobile app"
+
+    dependencies {
+        compile project(':commons')
+
+        compile("org.springframework.boot:spring-boot-starter-security")
+        compile('org.springframework.boot:spring-boot-starter-web')
+        compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    }
+}
+
+project('admin') {
+    description="admin.This project provides managing tool for inner user"
+
+    dependencies {
+        compile project(':commons')
+
+        compile("org.springframework.boot:spring-boot-starter-security")
+        compile('org.springframework.boot:spring-boot-starter-web')
+        compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    }
+}
+
+project('batch') {
+    description="riders-agent-batch. This project provides batch jobs using spring batch"
+
+    dependencies {
+        compile project(':commons')
+
+        compile "org.springframework.boot:spring-boot-starter-batch"
+        compile("org.springframework.boot:spring-boot-starter-security")
+        compile('org.springframework.boot:spring-boot-starter-web')
+        compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    }
+}
+
+project('dashboard') {
+    description="riders-dashboard. This project provides managing tool which used by customer who using riders-agent"
+
+    dependencies {
+        compile project(':commons')
+
+        compile "org.springframework.boot:spring-boot-starter-batch"
+        compile("org.springframework.boot:spring-boot-starter-security")
+        compile('org.springframework.boot:spring-boot-starter-web')
+        compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    }
+}
+
+
+
+
+
+
+
